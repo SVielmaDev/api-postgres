@@ -22,14 +22,14 @@ app.get('/cliente', async (req, res) => {
 });
 
 app.post('/cliente', async (req, res) => {
-  const { nombre, apellido, edad, email, precio } = req.body;
-  await pool.query('INSERT INTO cliente (nombre, apellido, edad, email) VALUES ($1, $2, $3, $4, $5)', [nombre, apellido, edad, email, precio]);
+  const { nombre, apellido, edad, email } = req.body;
+  await pool.query('INSERT INTO cliente (nombre, apellido, edad, email) VALUES ($1, $2, $3, $4, $5)', [nombre, apellido, edad, email]);
   res.sendStatus(200);
 });
 
 app.put('/cliente/:id', async (req, res) => {
   const { id } = req.params;
-  const { nombre, apellido, edad, email, precio } = req.body;
+  const { nombre, apellido, edad, email } = req.body;
   await pool.query('UPDATE cliente SET nombre = $1, apellido = $2, edad = $3, email = $4  WHERE id = $5', [nombre, apellido, edad, email, id]);
   res.sendStatus(200);
 });
