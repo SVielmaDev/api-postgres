@@ -22,7 +22,7 @@ app.get('/cliente', async (req, res) => {
 });
 
 app.get('/cliente/:rut', async (req, res) => {
-  const { rut } = req.query;
+  const { rut } = req.params;
 
   if (!rut) {
     return res.status(400).json({ error: 'Parámetro "rut" es requerido' });
