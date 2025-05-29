@@ -23,7 +23,7 @@ app.get('/cliente', async (req, res) => {
 
 app.post('/cliente', async (req, res) => {
   const { nombre, apellido, edad, email } = req.body;
-  await pool.query('INSERT INTO cliente (nombre, apellido, edad, email) VALUES ($1, $2, $3, $4, $5)', [nombre, apellido, edad, email]);
+  await pool.query('INSERT INTO cliente (nombre, apellido, edad, email) VALUES ($1, $2, $3, $4)', [nombre, apellido, edad, email]);
   res.sendStatus(200);
 });
 
