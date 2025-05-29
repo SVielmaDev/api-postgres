@@ -22,21 +22,21 @@ app.get('/cliente', async (req, res) => {
 });
 
 app.post('/cliente', async (req, res) => {
-  const { nombre, apellido, edad, email } = req.body;
-  await pool.query('INSERT INTO cliente (nombre, apellido, edad, email) VALUES ($1, $2, $3, $4)', [nombre, apellido, edad, email]);
+  const { rut, nombre, apellido, edad, email } = req.body;
+  await pool.query('INSERT INTO cliente (rut, nombre, apellido, edad, email) VALUES ($1, $2, $3, $4, $5)', [rut, nombre, apellido, edad, email]);
   res.status(200).json({ mensaje: "Cliente insertado correctamente" });
 });
 
 app.put('/cliente/:id', async (req, res) => {
-  const { id } = req.params;
+  const { rut } = req.params;
   const { nombre, apellido, edad, email } = req.body;
-  await pool.query('UPDATE cliente SET nombre = $1, apellido = $2, edad = $3, email = $4  WHERE id = $5', [nombre, apellido, edad, email, id]);
+  await pool.query('UPDATE cliente SET nombre = $1, apellido = $2, edad = $3, email = $4  WHERE id = $5', [nombre, apellido, edad, email, rut]);
   res.status(200).json({ mensaje: "Cliente actualizado correctamente" });
 });
 
 app.delete('/cliente/:id', async (req, res) => {
-  const { id } = req.params;
-  await pool.query('DELETE FROM cliente WHERE id = $1', [id]);
+  const { rut } = req.params;
+  await pool.query('DELETE FROM cliente WHERE id = $1', [rut]);
   res.status(200).json({ mensaje: "Cliente eliminado correctamente" });
 });
 
