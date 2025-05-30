@@ -46,13 +46,13 @@ app.post('/cliente', async (req, res) => {
 app.put('/cliente/:rut', async (req, res) => {
   const { rut } = req.params;
   const { nombre, apellido, edad, email } = req.body;
-  await pool.query('UPDATE cliente SET nombre = $1, apellido = $2, edad = $3, email = $4  WHERE id = $5', [nombre, apellido, edad, email, rut]);
+  await pool.query('UPDATE cliente SET nombre = $1, apellido = $2, edad = $3, email = $4  WHERE rut = $5', [nombre, apellido, edad, email, rut]);
   res.status(200).json({ mensaje: "Cliente actualizado correctamente" });
 });
 
 app.delete('/cliente/:rut', async (req, res) => {
   const { rut } = req.params;
-  await pool.query('DELETE FROM cliente WHERE id = $1', [rut]);
+  await pool.query('DELETE FROM cliente WHERE rut = $1', [rut]);
   res.status(200).json({ mensaje: "Cliente eliminado correctamente" });
 });
 
