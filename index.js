@@ -43,17 +43,31 @@ app.post('/cliente', async (req, res) => {
   res.status(200).json({ mensaje: "Cliente insertado correctamente" });
 });
 
-app.put('/cliente/:rut', async (req, res) => {
-  const { rut } = req.params;
-  const { nombre, apellido, edad, email } = req.body;
-  await pool.query('UPDATE cliente SET nombre = $1, apellido = $2, edad = $3, email = $4  WHERE rut = $5', [nombre, apellido, edad, email, rut]);
-  res.status(200).json({ mensaje: "Cliente actualizado correctamente" });
-});
-
 app.delete('/cliente/:rut', async (req, res) => {
   const { rut } = req.params;
   await pool.query('DELETE FROM cliente WHERE rut = $1', [rut]);
   res.status(200).json({ mensaje: "Cliente eliminado correctamente" });
+});
+
+app.put('/cliente/:rut', async (req, res) => {
+  const { rut } = req.params;
+  const { nombre, apellido, edad, email } = req.body;
+
+  try {
+    const result = await pool.query(
+      'UPDATE cliente SET nombre = $1, apellido = $2, edad = $3, email = $4 WHERE rut = $5',
+      [nombre, apellido, edad, email, rut]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Cliente no encontrado' });
+    }
+
+    res.status(200).json({ mensaje: 'Cliente actualizado correctamente' });
+  } catch (error) {
+    console.error('Error al actualizar cliente:', error);
+    res.status(500).json({ error: 'Error al actualizar cliente' });
+  }
 });
 
 const PORT = process.env.PORT || 3000;
