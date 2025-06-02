@@ -39,8 +39,28 @@ app.get('/cliente/:rut', async (req, res) => {
 
 app.post('/cliente', async (req, res) => {
   const { rut, nombre, apellido, edad, email } = req.body;
-  await pool.query('INSERT INTO cliente (rut, nombre, apellido, edad, email) VALUES ($1, $2, $3, $4, $5)', [rut, nombre, apellido, edad, email]);
-  res.status(200).json({ mensaje: "Cliente insertado correctamente" });
+
+  try {
+    await pool.query(
+      'INSERT INTO cliente (rut, nombre, apellido, edad, email) VALUES ($1, $2, $3, $4, $5)',
+      [rut, nombre, apellido, edad, email]
+    );
+    res.status(201).json({ mensaje: "Cliente insertado correctamente" });
+
+  } catch (error) {
+    if (error.code === '23505') {
+      if (error.detail.includes('rut')) {
+        res.status(409).json({ error: "El RUT ya está registrado" });
+      } else if (error.detail.includes('email')) {
+        res.status(409).json({ error: "El correo electrónico ya está en uso" });
+      } else {
+        res.status(409).json({ error: "Registro duplicado" });
+      }
+    } else {
+      console.error("Error inesperado:", error);
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
+  }
 });
 
 app.delete('/cliente/:rut', async (req, res) => {
